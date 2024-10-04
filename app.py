@@ -19,12 +19,15 @@ with col1:
     st.title('Distress Points Map')
     layer = st.selectbox(
         'Select layer',
-        ['All Distresses', 'By Severity', 'Distress Heatmap', 'Distress Type Clustering']
+        ['All Distresses', 'By Severity', 'By Distress Type', 'Distress Heatmap', 'Distress Type Clustering']
     )
 
-    # Conditionally display the "Select severity" dropdown right below the "Select layer" dropdown
+    # Conditionally display the "Select severity" or "Select distress type" dropdown based on the chosen layer
     if layer == 'By Severity':
         severity = st.selectbox('Select severity', df['Severity'].unique())
+
+    if layer == 'By Distress Type':
+        distress_type = st.selectbox('Select distress type', df['Distress_Type'].unique())
 
     # Footer with copyright text at the bottom of the sidebar
     st.markdown("<br><br><br><br><br><br><br>", unsafe_allow_html=True)  # Spacer for alignment
@@ -60,6 +63,18 @@ if layer == 'All Distresses':
 # Layer: By Severity
 elif layer == 'By Severity':
     filtered_df = df[df['Severity'] == severity]  # Use the severity selected above
+    
+    for _, row in filtered_df.iterrows():
+        folium.Marker(
+            location=[row['latitude_y'], row['longitude_']],
+            popup=create_popup(row),
+            icon=folium.Icon(color='red' if row['Severity'] == 'High' else 
+                            ('orange' if row['Severity'] == 'Medium' else 'green'))
+        ).add_to(m)
+
+# Layer: By Distress Type
+elif layer == 'By Distress Type':
+    filtered_df = df[df['Distress_Type'] == distress_type]  # Use the distress type selected above
     
     for _, row in filtered_df.iterrows():
         folium.Marker(
