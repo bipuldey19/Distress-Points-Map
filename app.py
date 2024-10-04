@@ -5,7 +5,8 @@ from folium.plugins import HeatMap, MarkerCluster
 from streamlit_folium import folium_static
 
 # Load the CSV file
-df = pd.read_csv(r'D:\University\4-1\Transportation\preview.csv')
+csv_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYSUOh5kElFlNoJb7j8f1gNMBs6m76JSj0nAknc6vomY5JkCBsVVLPr4kBu6J03__pH0rJsuVkoYOO/pub?output=csv"
+df = pd.read_csv(csv_url)
 
 # Set up page configuration for a fullscreen experience
 st.set_page_config(layout="wide")
