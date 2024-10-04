@@ -22,10 +22,14 @@ with col1:
         ['All Distresses', 'By Severity', 'Distress Heatmap', 'Distress Type Clustering']
     )
 
+    # Conditionally display the "Select severity" dropdown right below the "Select layer" dropdown
+    if layer == 'By Severity':
+        severity = st.selectbox('Select severity', df['Severity'].unique())
+
     # Footer with copyright text at the bottom of the sidebar
     st.markdown("<br><br><br><br><br><br><br>", unsafe_allow_html=True)  # Spacer for alignment
     st.markdown("---")
-    st.markdown("© **Bipul Dey**, Department of Urban & Regional Planning, RUET, 2024.",)
+    st.markdown("© **Bipul Dey**, Department of Urban & Regional Planning, RUET, 2024.")
 
 # Initialize the map at the center of the coordinates
 center_lat = df['latitude_y'].mean()
@@ -55,8 +59,7 @@ if layer == 'All Distresses':
 
 # Layer: By Severity
 elif layer == 'By Severity':
-    severity = st.selectbox('Select severity', df['Severity'].unique())
-    filtered_df = df[df['Severity'] == severity]
+    filtered_df = df[df['Severity'] == severity]  # Use the severity selected above
     
     for _, row in filtered_df.iterrows():
         folium.Marker(
