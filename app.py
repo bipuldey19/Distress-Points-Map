@@ -9,7 +9,7 @@ csv_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYSUOh5kElFlNoJb7j8f
 df = pd.read_csv(csv_url)
 
 # Set up page configuration for a fullscreen experience
-st.set_page_config(layout="wide")
+st.set_page_config(page_title='Distress points map, Rajshahi | Group: 12', layout="wide")
 
 st.markdown("""
     <style>
