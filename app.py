@@ -25,6 +25,7 @@ st.markdown("""
     
     iframe.stIFrame {
     width: 100%;
+    border-radius: 20px;
     }
     
     </style>
