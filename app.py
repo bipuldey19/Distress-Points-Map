@@ -32,12 +32,12 @@ with col1:
     # Footer with copyright text at the bottom of the sidebar
     st.markdown("<br><br><br><br><br><br><br>", unsafe_allow_html=True)  # Spacer for alignment
     st.markdown("---")
-    st.markdown("© **Bipul Dey**, Department of Urban & Regional Planning, RUET, 2024.")
+    st.markdown("© **Bipul Dey**, Department of Urban & Regional Planning, RUET 2024.")
 
 # Initialize the map at the center of the coordinates
 center_lat = df['latitude_y'].mean()
 center_lon = df['longitude_'].mean()
-m = folium.Map(location=[center_lat, center_lon], zoom_start=10)
+map = folium.Map(location=[center_lat, center_lon], zoom_start=15)
 
 # Function to create popups with image and distress information
 def create_popup(row):
@@ -58,7 +58,7 @@ if layer == 'All Distresses':
             popup=create_popup(row),
             icon=folium.Icon(color='red' if row['Severity'] == 'High' else 
                             ('orange' if row['Severity'] == 'Medium' else 'green'))
-        ).add_to(m)
+        ).add_to(map)
 
 # Layer: By Severity
 elif layer == 'By Severity':
@@ -70,7 +70,7 @@ elif layer == 'By Severity':
             popup=create_popup(row),
             icon=folium.Icon(color='red' if row['Severity'] == 'High' else 
                             ('orange' if row['Severity'] == 'Medium' else 'green'))
-        ).add_to(m)
+        ).add_to(map)
 
 # Layer: By Distress Type
 elif layer == 'By Distress Type':
@@ -82,16 +82,16 @@ elif layer == 'By Distress Type':
             popup=create_popup(row),
             icon=folium.Icon(color='red' if row['Severity'] == 'High' else 
                             ('orange' if row['Severity'] == 'Medium' else 'green'))
-        ).add_to(m)
+        ).add_to(map)
 
 # Layer: Distress Heatmap
 elif layer == 'Distress Heatmap':
     heat_data = [[row['latitude_y'], row['longitude_']] for index, row in df.iterrows()]
-    HeatMap(heat_data).add_to(m)
+    HeatMap(heat_data).add_to(map)
 
 # Layer: Distress Type Clustering
 elif layer == 'Distress Type Clustering':
-    marker_cluster = MarkerCluster().add_to(m)
+    marker_cluster = MarkerCluster().add_to(map)
     for _, row in df.iterrows():
         folium.Marker(
             location=[row['latitude_y'], row['longitude_']],
@@ -102,4 +102,4 @@ elif layer == 'Distress Type Clustering':
 
 # Display the map in Streamlit (using the second column for the map)
 with col2:
-    folium_static(m, width=1400, height=700)  # Make map large within the second column
+    folium_static(map, width=1400)  # Make map large within the second column
