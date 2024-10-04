@@ -11,10 +11,29 @@ df = pd.read_csv(csv_url)
 # Set up page configuration for a fullscreen experience
 st.set_page_config(layout="wide")
 
-# Layout split into two columns: 1 for sidebar, 1 for map
-col1, col2 = st.columns([1, 4])  # Left (col1) is 1 part, right (col2) is 4 parts
+st.markdown("""
+    <style>
+    @media (min-width: 576px) {
+        section.stMain {
+            overflow: hidden;
+        }
+        .block-container {
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
+        }
+    }
+    
+    iframe.stIFrame {
+    width: 100%;
+    }
+    
+    </style>
+""", unsafe_allow_html=True)
 
-with col1:
+# Layout split into two columns: 1 for sidebar, 1 for map
+left_col, right_col = st.columns([1, 4])  # Left (left_col) is 1 part, right (right_col) is 4 parts
+
+with left_col:
     # Sidebar section for layers and title
     st.title('Distress Points Map')
     layer = st.selectbox(
@@ -29,7 +48,7 @@ with col1:
     if layer == 'By Distress Type':
         distress_type = st.selectbox('Select distress type', df['Distress_Type'].unique())
 
-    # Footer with copyright text at the bottom of the sidebar
+    # Footer with copyright_col text at the bottom of the sidebar
     st.markdown("<br><br><br><br><br><br><br>", unsafe_allow_html=True)  # Spacer for alignment
     st.markdown("---")
     st.markdown("© **Bipul Dey**, Department of Urban & Regional Planning, RUET 2024.")
@@ -38,6 +57,13 @@ with col1:
 center_lat = df['latitude_y'].mean()
 center_lon = df['longitude_'].mean()
 map = folium.Map(location=[center_lat, center_lon], zoom_start=15)
+
+folium.plugins.Fullscreen(
+    position="topright",
+    title="Expand me",
+    title_cancel="Exit me",
+    force_separate_button=True,
+).add_to(map)
 
 # Function to create popups with image and distress information
 def create_popup(row):
@@ -101,5 +127,5 @@ elif layer == 'Distress Type Clustering':
         ).add_to(marker_cluster)
 
 # Display the map in Streamlit (using the second column for the map)
-with col2:
+with right_col:
     folium_static(map, width=1400)  # Make map large within the second column
